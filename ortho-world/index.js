@@ -28,26 +28,10 @@
   const offset = computeOffset();
 
   const canvas = document.getElementById("canvas");
-  canvas.width = viewPortSize.width;
-  canvas.height = viewPortSize.height;
+  setCanvasSize();
   const context = canvas.getContext("2d");
 
-  for (let i = 0; i < world.length; i++) {
-    for (let j = 0; j < world[0].length; j++) {
-      const type = world[i][j];
-      const image = createTileImage(type);
-      const position2d = { x: j, y: i };
-      const position = convert2dToScreen(position2d);
-      image.onload = () =>
-        context.drawImage(
-          image,
-          position.x + offset.x,
-          position.y + offset.y,
-          tileSize.width,
-          tileSize.height
-        );
-    }
-  }
+  drawWorld();
 
   function computeOffset() {
     const boundingBox = {
@@ -58,6 +42,30 @@
       x: (viewPortSize.width - boundingBox.width) / 2,
       y: (viewPortSize.height - boundingBox.height) / 2
     };
+  }
+
+  function setCanvasSize() {
+    canvas.width = viewPortSize.width;
+    canvas.height = viewPortSize.height;
+  }
+
+  function drawWorld() {
+    for (let i = 0; i < world.length; i++) {
+      for (let j = 0; j < world[0].length; j++) {
+        const type = world[i][j];
+        const image = createTileImage(type);
+        const position2d = { x: j, y: i };
+        const position = convert2dToScreen(position2d);
+        image.onload = () =>
+          context.drawImage(
+            image,
+            position.x + offset.x,
+            position.y + offset.y,
+            tileSize.width,
+            tileSize.height
+          );
+      }
+    }
   }
 
   function createTileImage(type) {
