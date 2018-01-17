@@ -6,6 +6,8 @@
     1: "rock"
   };
 
+  const imageCache = {};
+
   const world = [
     [1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 1],
@@ -59,22 +61,26 @@
         const image = createTileImage(type);
         const position2d = { x: j, y: i };
         const position = convert2dToScreen(position2d);
-        image.onload = () =>
+        image.addEventListener("load", () =>
           context.drawImage(
             image,
             position.x + offset.x,
             position.y + offset.y,
             tileSize.width,
             tileSize.height
-          );
+          )
+        );
       }
     }
   }
 
   function createTileImage(type) {
-    const image = new Image();
-    image.src = `tiles/${tiles[type]}.png`;
-    return image;
+    if (!imageCache[type]) {
+      const image = new Image();
+      image.src = `tiles/${tiles[type]}.png`;
+      imageCache[type] = image;
+    }
+    return imageCache[type];
   }
 
   function convert2dToScreen(point) {
