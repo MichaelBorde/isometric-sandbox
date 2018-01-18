@@ -18,13 +18,13 @@
   ];
 
   const viewPortSize = {
-    width: 400,
-    height: 400
+    width: 800,
+    height: 800
   };
 
   const tileSize = {
-    width: 64,
-    height: 32
+    width: 128,
+    height: 64
   };
 
   const offset = computeOffset();
