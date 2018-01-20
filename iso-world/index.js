@@ -6,8 +6,6 @@
     1: "rock"
   };
 
-  const imageCache = {};
-
   const world = [
     [1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 1],
@@ -18,13 +16,13 @@
   ];
 
   const viewPortSize = {
-    width: 800,
-    height: 800
+    width: 640,
+    height: 480
   };
 
   const tileSize = {
-    width: 128,
-    height: 64
+    width: 64,
+    height: 32
   };
 
   const offset = computeOffset();
@@ -32,6 +30,8 @@
   const canvas = document.getElementById("canvas");
   setCanvasSize();
   const context = canvas.getContext("2d");
+
+  const imageCache = createImageCache();
 
   drawWorld();
 
@@ -58,29 +58,37 @@
     for (let i = 0; i < world.length; i++) {
       for (let j = 0; j < world[0].length; j++) {
         const type = world[i][j];
-        const image = createTileImage(type);
         const position2d = { x: j, y: i };
         const position = convert2dToScreen(position2d);
-        image.addEventListener("load", () =>
-          context.drawImage(
-            image,
-            position.x + offset.x,
-            position.y + offset.y,
-            tileSize.width,
-            tileSize.height
-          )
-        );
+        imageCache
+          .get(type)
+          .then(image =>
+            context.drawImage(
+              image,
+              position.x + offset.x,
+              position.y + offset.y,
+              tileSize.width,
+              tileSize.height
+            )
+          );
       }
     }
   }
 
-  function createTileImage(type) {
-    if (!imageCache[type]) {
-      const image = new Image();
-      image.src = `tiles/${tiles[type]}.png`;
-      imageCache[type] = image;
+  function createImageCache() {
+    const cache = {};
+    return { get };
+
+    function get(type) {
+      if (!cache[type]) {
+        const image = new Image();
+        image.src = `tiles/${tiles[type]}.png`;
+        cache[type] = new Promise(resolve => {
+          image.onload = () => resolve(image);
+        });
+      }
+      return cache[type];
     }
-    return imageCache[type];
   }
 
   function convert2dToScreen(point) {
