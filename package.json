@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npm run eslint",
     "eslint": "eslint .",
-    "prettier": "prettier --write \"**/*.js\""
+    "prettier": "prettier --write \"**/*.js\"",
+    "start": "http-server -p 9000 ."
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,10 @@
   },
   "homepage": "https://github.com/MichaelBorde/isometric-sandbox#readme",
   "devDependencies": {
-    "eslint": "4.11.0",
-    "prettier": "1.9.2"
+    "eslint": "4.16.0",
+    "prettier": "1.10.2"
+  },
+  "dependencies": {
+    "http-server": "0.11.1"
   }
 }
