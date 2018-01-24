@@ -57,22 +57,28 @@
   function drawWorld() {
     for (let i = 0; i < world.length; i++) {
       for (let j = 0; j < world[0].length; j++) {
-        const type = world[i][j];
-        const position2d = { x: j, y: i };
-        const position = convert2dToScreen(position2d);
-        imageCache
-          .get(type)
-          .then(image =>
-            context.drawImage(
-              image,
-              position.x + offset.x,
-              position.y + offset.y,
-              tileSize.width,
-              tileSize.height
-            )
-          );
+        drawTile(world[i][j], { x: j, y: i });
       }
     }
+  }
+
+  function drawTile(type, gridPosition) {
+    const position = convertGridToScreen(gridPosition);
+    const offseted = {
+      x: position.x + offset.x,
+      y: position.y + offset.y
+    };
+    imageCache
+      .get(type)
+      .then(image =>
+        context.drawImage(
+          image,
+          offseted.x,
+          offseted.y,
+          tileSize.width,
+          tileSize.height
+        )
+      );
   }
 
   function createImageCache() {
@@ -91,7 +97,7 @@
     }
   }
 
-  function convert2dToScreen(point) {
+  function convertGridToScreen(point) {
     const x = (point.x - point.y) * tileSize.width / 2;
     const y = (point.x + point.y) * tileSize.height / 2;
     return { x, y };

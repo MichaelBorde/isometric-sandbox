@@ -16,16 +16,14 @@
   ];
 
   const viewPortSize = {
-    width: 640,
-    height: 480
+    width: 384,
+    height: 384
   };
 
   const tileSize = {
     width: 64,
     height: 64
   };
-
-  const offset = computeOffset();
 
   const canvas = document.getElementById('canvas');
   setCanvasSize();
@@ -34,17 +32,6 @@
   const imageCache = createImageCache();
 
   drawWorld();
-
-  function computeOffset() {
-    const boundingBox = {
-      width: world[0].length * tileSize.width,
-      height: world.length * tileSize.height
-    };
-    return {
-      x: (viewPortSize.width - boundingBox.width) / 2,
-      y: (viewPortSize.height - boundingBox.height) / 2
-    };
-  }
 
   function setCanvasSize() {
     canvas.width = viewPortSize.width;
@@ -62,8 +49,8 @@
           .then(image =>
             context.drawImage(
               image,
-              position.x + offset.x,
-              position.y + offset.y,
+              position.x,
+              position.y,
               tileSize.width,
               tileSize.height
             )
